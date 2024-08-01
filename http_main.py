@@ -179,7 +179,7 @@ def req_gen_status(gen_id: str):
 
 def req_download_firmware(gen_id: str):
     server = os.environ.get("FIRMWARE_SERVER")
-    url = f"{server}/api/v1/firmware/download?prj_name={gen_id}"
+    url = f"{server}/api/v1/firmware?prj_name={gen_id}"
     # 发起下载请求
     res = requests.get(url)
     if res.status_code != 200:
@@ -188,6 +188,9 @@ def req_download_firmware(gen_id: str):
 
     # 保存固件
     firmware_path_root = os.environ.get("FIRMWARE_PATH")
+    if not os.path.exists(firmware_path_root):
+        os.makedirs(firmware_path_root)
+
     save_path = f"{firmware_path_root}/{gen_id}.bin"
     with open(save_path, "wb") as f:
         f.write(res.content)
