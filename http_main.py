@@ -166,9 +166,16 @@ def req_gen_firmware(data: dict):
 
 def req_gen_status(gen_id: str):
     server = os.environ.get("FIRMWARE_SERVER")
+    # 模拟chrome请求头
+    headers = {
+        'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
+        'Accept': '*/*',
+        'Host': 'ss.arduino.me',
+        'Connection': 'keep-alive'
+    }
     url = f"{server}/api/v1/firmware/status?prj_name={gen_id}"
     # 发起状态获取请求
-    res = requests.get(url)
+    res = requests.get(url, headers=headers)
     if res.status_code != 200:
         logger.error(f"获取固件生成状态失败: {res.text}")
         return None
